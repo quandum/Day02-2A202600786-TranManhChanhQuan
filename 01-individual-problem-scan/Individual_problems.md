@@ -1,5 +1,4 @@
-# 01 — Individual Problem Scan (Template)
-
+# 01 — Individual Problem Scan
 > Hướng dẫn: Sao chép phần dưới đây cho mỗi problem bạn scan. Điền thông tin ngắn gọn, cụ thể và có bằng chứng/ứng xử thật khi có thể.
 
 ## Scan rộng
@@ -32,11 +31,10 @@ Ghi chú: Mỗi problem nên có **actor** và **dấu hiệu thật** (e.g., "m
 
 ---
 
-## Problem Cards (viết lại)
-
+## Problem Cards
 
 ### Problem Card #1 — Khó khăn phát âm
-**Problem 1 câu:**  
+**Problem 1:**  
 Tôi muốn một thiết bị realtime chuyển tiếng Việt khó nghe của tôi thành tiếng Việt bình thường để người khác hiểu ngay.
 
 **Actor:**  
