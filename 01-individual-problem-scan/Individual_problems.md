@@ -36,83 +36,71 @@ Ghi chú: Mỗi problem nên có **actor** và **dấu hiệu thật** (e.g., "m
 
 
 ### Problem Card #1 — Khó khăn phát âm
+**Problem 1 câu:**  
+Tôi muốn một thiết bị realtime chuyển tiếng Việt khó nghe của tôi thành tiếng Việt bình thường để người khác hiểu ngay.
 
-Ý tưởng: AI phiên dịch giọng nói của chính mình (voice-to-voice normalization)
+**Actor:**  
+Tôi (người có giọng nói khó nghe / phát âm không rõ).
 
-Tóm tắt (elevator): Một hệ thống realtime chuyển giọng nói của bạn thành phiên bản nói rõ, giữ nội dung và ngữ điệu cơ bản — giúp người nghe hiểu ngay lập tức và người dùng có thể học từ các sửa đổi.
+**Thời điểm / bối cảnh:**  
+Khi nói chuyện trực tiếp, gọi điện, họp online, hoặc cần người khác hiểu ngay điều tôi vừa nói.
 
-Vấn đề cần giải: Bị hiểu sai do phát âm/giọng lệch dẫn tới gián đoạn giao tiếp, giảm tự tin và mất cơ hội.
+**Current workflow:**
 
-Giải pháp (một câu): Ghi âm → ASR thích nghi với giọng lệch → phát hiện lỗi phát âm → tạo bản sửa (text và/hoặc audio) → phát lại/hiển thị cho người dùng.
+```text
+1. Tôi nói bằng giọng khó nghe
+2. Người nghe hỏi lại hoặc hiểu sai
+3. Tôi phải lặp lại, nói chậm hơn, hoặc chuyển sang viết
+```
 
-Tính năng chính:
-- Realtime STT chuyên cho giọng lệch; phoneme-level error detector;
-- Correction engine (text normalization + sửa phát âm);
-- Speech-to-speech: phát lại phiên bản đã sửa (giữ/chuẩn hoá giọng tùy chọn);
-- Chế độ học: hiển thị phiên âm + bài tập ngắn; lịch theo dõi tiến trình.
+**Bottleneck:**  
+Người nghe không hiểu nội dung ngay lúc tôi nói, nên cuộc giao tiếp bị ngắt quãng.
 
-Hành trình người dùng (MVP flow):
-1) Bật chế độ "Phiên dịch cá nhân";
-2) Nói 1–2 câu; app ghi âm và chạy pipeline;
-3) Hiển thị text gốc + text đã chuẩn và phát lại audio đã chỉnh (nếu bật);
-4) Người dùng chấp nhận/lưu/bắt đầu bài tập luyện.
+**Impact:**  
+Mất tự tin, mất thời gian lặp lại, và có thể làm giảm hiệu quả giao tiếp trong học tập, công việc, hoặc cuộc gọi.
 
-MVP (ít nhất để thử):
-- STT tiếng Việt robust (pretrained) + phoneme aligner;
-- Rule-based correction + small ML model cho sửa lỗi phổ biến;
-- TTS đơn giản để phát lại phiên bản đã sửa;
-- UI: bật/tắt, phát lại, hiển thị sửa, lưu bài tập.
+**Success metric:**
+- Giảm số lần phải nói lại trong một cuộc trò chuyện xuống ít nhất 50%.
+- Giảm thời gian để người nghe hiểu đúng ý tôi xuống dưới 5 giây cho mỗi câu ngắn.
 
-Kiến trúc (tóm tắt):
-- Frontend: app (mobile/desktop) thu âm, phát lại, UI;
-- Backend/On-device: STT → phoneme detector → correction generator → TTS/voice conversion (tuỳ yêu cầu);
-- Storage: lưu audio & logs mã hoá, opt-in cho training cá nhân.
+**Non-AI alternative:**  
+Nói chậm hơn, luyện phát âm với giáo viên, hoặc dùng cách viết ra thay vì nói.
 
-Dữ liệu & training: cần corpus speech+transcript có đa dạng accent, dữ liệu phoneme-aligned; data augmentation cho lỗi phát âm.
+**AI hypothesis:**  
+AI có thể nghe realtime, nhận ra phần nói khó nghe, và chuyển nó thành câu tiếng Việt rõ ràng hơn mà vẫn giữ nguyên ý chính.
 
-Success metrics (gợi ý):
-- Giảm % lần bị hỏi lại trong cuộc gọi ≥ 50% sau 4 tuần pilot;
-- Tỉ lệ chấp nhận phiên bản AI ≥ 70% (người dùng chọn phát lại AI);
-- Điểm hiểu (listener comprehension) cải thiện trên bộ test chuẩn.
+**Quick gut:**  
+Phù hợp với một thiết bị hỗ trợ realtime, vì pain xảy ra ngay lúc giao tiếp và có thể đo bằng số lần phải nhắc lại.
 
-Rủi ro & giảm thiểu:
-- Thay đổi ý nghĩa: chỉ sửa phát âm, không sửa nội dung; luôn hiển thị văn bản gốc;
-- Riêng tư: xử lý on-device hoặc mã hóa; opt-in voice cloning;
-- Tâm lý người dùng: giữ ngữ điệu/giọng cá nhân, không ép chuyển giọng.
+### Draft current workflow
 
-Lộ trình ngắn hạn (8–16 tuần):
-1–4: Prototype STT + rule-based correction + TTS demo;
-5–8: Pilot 10–20 người, thu feedback và đo metric;
-9–16: Cải tiến ML, thêm tuỳ chọn voice-preserving conversion và onboarding đào tạo.
+```text
+CURRENT STATE — 30–60 giây cho một trao đổi ngắn
 
+[1 Nói bằng giọng khó nghe]
+→ [2 Người nghe hỏi lại]
+→ [3 Tôi lặp lại hoặc viết ra]
+```
 
-Problem (1 câu): Tôi thường bị hiểu sai khi nói do phát âm không rõ.
+### Draft future workflow
 
-Actor: Tôi (người có khó khăn phát âm / người học ngôn ngữ).
+```text
+FUTURE STATE — realtime
 
-Bối cảnh: Giao tiếp hàng ngày, gọi điện, thuyết trình, hoặc phỏng vấn.
+[1 Tôi nói vào thiết bị]
+→ [2 Thiết bị nhận âm thanh]
+→ [3 AI chuyển thành tiếng Việt bình thường]
+→ [4 Thiết bị hiển thị/phát lại câu rõ ràng]
+→ [5 Người nghe hiểu ngay]
 
-Current workflow (hiện tại):
-1) Cố phát âm; 2) Người nghe hỏi lại hoặc hiểu sai; 3) Tôi lặp lại, viết thay hoặc tránh nói.
+Fallback: nếu AI đoán sai, hiển thị bản gốc để tôi sửa nhanh.
+```
 
-Bottleneck: Lỗi phát âm do yếu khả năng điều khiển thanh quản
+**Fallback / Exit criteria:**  
+Nếu AI làm sai nghĩa hoặc chậm quá, người dùng quay về cách nói thường, dùng text, hoặc chuyển sang hỗ trợ của người thật.
 
-Impact: Hiểu nhầm, giảm tự tin, hạn chế cơ hội giao tiếp và nghề nghiệp.
-
-Success metrics (ví dụ):
-- Giảm số lần bị hỏi lại trong cuộc gọi trung bình từ hiện tại xuống 50% sau 4 tuần.
-- Tăng số lần chủ động phát biểu trong nhóm từ X → X+Y trong 4 tuần.
-
-Non-AI alternative: Gia sư phát âm, lớp luyện nói, hoặc ứng dụng luyện theo giáo viên.
-
-AI intervention: Ứng dụng ghi âm → phân tích lỗi phát âm → trả về phiên âm, điểm lỗi và bài tập cá nhân hoá; người dùng luyện rồi so sánh tiến triển.
-
-Quick plan (future workflow):
-1) Ghi âm mẫu 30–60s; 2) AI phân tích & trả về lỗi chính (30–60s); 3) AI gợi ý bài tập ngắn; 4) Người dùng luyện + review kết quả.
-
-Fallback / exit: Nếu AI chẩn đoán không chính xác hoặc không cải thiện sau 2 tuần, chuyển sang gia sư trực tiếp.
-
-Rủi ro & kiểm soát: Sai sót trong chuẩn đoán; cần lưu trữ an toàn âm thanh và có human coach kiểm chứng bài tập quan trọng.
+**Rủi ro & kiểm soát:**  
+Sai ý nghĩa khi sửa câu, độ trễ realtime, và quyền riêng tư của giọng nói; cần cho phép xem bản gốc, chỉnh tay, và xoá dữ liệu.
 
 ---
 
